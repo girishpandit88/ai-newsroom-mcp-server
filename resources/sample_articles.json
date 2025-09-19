@@ -1,0 +1,22 @@
+{
+  "sources": {
+    "sample": [
+      {
+        "id": "sample-1",
+        "title": "OpenAI launches newsroom automation toolkit",
+        "url": "https://example.com/newsroom/openai-toolkit",
+        "timestamp": "2025-02-14T09:30:00Z",
+        "author": "Jamie Rivera",
+        "content": "OpenAI announced a newsroom automation toolkit aimed at helping local journalism outlets create daily digests. The toolkit integrates with existing content management systems and offers AI-assisted summarization. Early partners in New York City say the pilot improved newsroom throughput without sacrificing editorial oversight."
+      },
+      {
+        "id": "sample-2",
+        "title": "Local climate desk expands community data partnerships",
+        "url": "https://example.com/newsroom/climate-desk",
+        "timestamp": "2025-02-13T15:00:00Z",
+        "author": "Priya Das",
+        "content": "The Metro Climate Desk is expanding partnerships with universities to gather hyperlocal climate data. Community scientists in Brooklyn and Queens will deploy low-cost sensors to track air quality hotspots. Organizers believe the initiative will give policymakers better insights while keeping residents engaged."
+      }
+    ]
+  }
+}
