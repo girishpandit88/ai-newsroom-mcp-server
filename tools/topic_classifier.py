@@ -1,8 +1,10 @@
 from __future__ import annotations
 
-from typing import Dict, List
+import sys
+from typing import Dict, List, Optional
 
 from newsroom import Passage, TopicPrediction
+from newsroom.llm import classify_topics_with_llm
 
 _TOPIC_KEYWORDS = {
     "Technology": ["ai", "automation", "toolkit", "openai"],
@@ -11,8 +13,23 @@ _TOPIC_KEYWORDS = {
 }
 
 
-def classify_topic(passages: List[Passage]) -> Dict[str, List[TopicPrediction]]:
-    """Classify passages into newsroom beats using keyword heuristics."""
+def classify_topic(
+    passages: List[Passage],
+    llm_mode: bool = False,
+    model: Optional[str] = None,
+    fallback_on_error: bool = True,
+) -> Dict[str, List[TopicPrediction]]:
+    """Classify passages into newsroom beats with optional LLM assistance."""
+
+    if llm_mode and passages:
+        try:
+            llm_topics = classify_topics_with_llm(passages, model=model)
+        except RuntimeError as exc:
+            if not fallback_on_error:
+                raise
+            print(f"[newsroom] llm topic classification fallback: {exc}", file=sys.stderr)
+        else:
+            return {"topics": llm_topics}  # type: ignore[return-value]
 
     topics: List[TopicPrediction] = []
 

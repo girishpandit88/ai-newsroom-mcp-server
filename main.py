@@ -43,7 +43,7 @@ def run_demo() -> None:
     )
     tagged = tag_entities(resolved["resolved_entities"])
 
-    topics = classify_topic(all_passages)
+    topics = classify_topic(all_passages, llm_mode=llm_enabled)
     sentiments = analyze_sentiment(all_passages)
 
     summaries = summarize_tags(

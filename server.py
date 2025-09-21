@@ -13,6 +13,7 @@ from tools.sentiment_analyzer import analyze_sentiment
 from tools.tag_summarizer import summarize_tags
 from tools.fact_checker import fact_check
 from tools.ranker import rank_stories
+from tools.personalizer import personalize_and_rank
 from tools.compiler import compile_digest
 from tools.deliverer import deliver_digest
 
@@ -39,6 +40,7 @@ mcp.tool()(analyze_sentiment)
 mcp.tool()(summarize_tags)
 mcp.tool()(fact_check)
 mcp.tool()(rank_stories)
+mcp.tool()(personalize_and_rank)
 mcp.tool()(compile_digest)
 mcp.tool()(deliver_digest)
 

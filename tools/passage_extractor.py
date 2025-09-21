@@ -1,8 +1,10 @@
 from __future__ import annotations
 
-from typing import Dict, List
+import sys
+from typing import Dict, List, Optional
 
 from newsroom import Passage
+from newsroom.llm import extract_passages_with_llm
 
 
 def _chunk_text(text: str, max_length: int) -> List[str]:
@@ -34,12 +36,31 @@ def extract_passages(
     article_id: str,
     content: str,
     max_length: int = 320,
+    llm_mode: bool = False,
+    model: Optional[str] = None,
+    fallback_on_error: bool = True,
 ) -> Dict[str, List[Passage]]:
     """Split full article text into coherent passages.
 
     The helper keeps passages short enough for downstream tools while preserving the
-    original order.
+    original order. When ``llm_mode`` is enabled, passage splitting is delegated to an
+    LLM and falls back to the rule-based strategy if necessary.
     """
+
+    if llm_mode and content.strip():
+        try:
+            llm_passages = extract_passages_with_llm(
+                article_id=article_id,
+                content=content,
+                max_length=max_length,
+                model=model,
+            )
+        except RuntimeError as exc:
+            if not fallback_on_error:
+                raise
+            print(f"[newsroom] llm passage extraction fallback: {exc}", file=sys.stderr)
+        else:
+            return {"passages": llm_passages}  # type: ignore[return-value]
 
     passages: List[Passage] = []
     order = 0
@@ -57,7 +78,7 @@ def extract_passages(
                 }
             )
 
-    if not passages:
+    if not passages and content.strip():
         passages.append(
             {
                 "id": f"{article_id}-p1",
